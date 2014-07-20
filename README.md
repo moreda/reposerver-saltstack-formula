@@ -5,7 +5,7 @@ organized by prefixes (i.e. customers, teams, etc.). It could be easily
 combined with nginx to have authenticated HTTP(S) access to those repos.
 
 
-# How it does it work
+# How does it work
 
 All the relevant data is defined in pillar data files like this:
 
@@ -240,6 +240,16 @@ The .htaccess is empty and so far it's disallowing the access to the prefix acco
 
 If you need to delete the repo, you have to delete the correponding entries in the pillar data **and** delete the directory (which you can do using `salt 'nameofiminion' file remove /var/www/repo/public_html/xyz`).
 
+## Add the GPG key of the repo
+
+For example, for an Ubuntu repo you should do:
+
+```
+sudo -i -u repouser
+cd /var/www/repo/all/ubuntu
+gpg --armor --output GPG-key.txt --export ID-OF-THE-GPG-KEY
+```
+
 ## Add and delete an user
 
 Adding an deleting users are considered non-salt configurations, so they can be
@@ -260,16 +270,16 @@ htpasswd -D /var/www/repo/public_html/mnp/.htaccess bob
 
 ## Add and remove a .deb package
 
-Adding an removing packages are considered non-salt configurations, so they can
-be carried on by (authorized) users in the minions not depending on asking for
-a change in the master.
+Adding an removing packages are considered non-salted configurations, so they
+can be carried on by (authorized) users in the minions not depending on asking
+for a change in the master.
 
 Upload your deb package somewhere in the reposerver (e.g. /home/yourusername/foo.deb).
 
 ```sh
 sudo -i -u repouser
 cd /var/www/repo/all/ubuntu
-reprepro includedeb precise /home/yourusername/foo.deb 
+reprepro -S main -P extra includedeb precise /home/yourusername/foo.deb 
 ```
 
 If you have configured gpg signing (recommended) you'll be asked to enter the
