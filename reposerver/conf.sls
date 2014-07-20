@@ -2,7 +2,7 @@
 
 
 include:
-  - reposerver.user
+  - reposerver.users
   - reposerver.utils
 
 
@@ -34,6 +34,9 @@ include:
     - makedirs: true
     - user: {{ repo_user }}
     - group: {{ repo_group }}
+    - require:
+      - user: reposerver_user
+      - group: reposerver_group
 
 
 # Install gpg keys needed to sign repos
@@ -70,6 +73,10 @@ include:
     - user: {{ repo_user }}
     - group: {{ repo_group }}
     - dir_mode: 2775
+    - require:
+      - user: reposerver_user
+      - group: reposerver_group
+
 
   {% if salt['pillar.get']('reposerver:prefixes:' ~ prefix ~
                              ':private', true) %}
@@ -79,6 +86,10 @@ include:
     - makedirs: true
     - user: {{ repo_user }}
     - group: {{ repo_group }}
+    - require:
+      - user: reposerver_user
+      - group: reposerver_group
+
   {% endif %}
 
   {% for distro in salt['pillar.get']('reposerver:prefixes:' ~ prefix ~
@@ -112,6 +123,9 @@ include:
     - user: {{ repo_user }}
     - group: {{ repo_group }}
     - dir_mode: 2775
+    - require:
+      - user: reposerver_user
+      - group: reposerver_group
 
 
     {% if repotype == 'apt' %}
@@ -136,6 +150,9 @@ include:
         codenames: {{ codenames }}
         architectures: {{ architectures }}
         components: {{ components }}
+    - require:
+      - user: reposerver_user
+      - group: reposerver_group
       {% endfor %}
 
 
@@ -149,6 +166,9 @@ include:
     - user: {{ repo_user }}
     - group: {{ repo_group }}
     - dir_mode: 2775
+    - require:
+      - user: reposerver_user
+      - group: reposerver_group
         {% endfor %} # architecture loop
       {% endfor %} # codename loop
 
@@ -162,6 +182,9 @@ include:
     - user: {{ repo_user }}
     - group: {{ repo_group }}
     - dir_mode: 2775
+    - require:
+      - user: reposerver_user
+      - group: reposerver_group
       {% endfor %}
     {% endif %}
 
