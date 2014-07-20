@@ -1,0 +1,6 @@
+{% set reposerver = salt['grains.filter_by']({
+    'default': {
+        'pkg': 'reposerver',
+        'service': 'reposerver',
+    },
+}, merge=salt['pillar.get']('reposerver:lookup')) %}

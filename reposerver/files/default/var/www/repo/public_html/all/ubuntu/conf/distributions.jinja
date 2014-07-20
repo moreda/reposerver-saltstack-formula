@@ -1,0 +1,11 @@
+{% for codename in codenames %}
+Origin: Allenta
+Label: Allenta
+Codename: {{ codename }}
+Architectures: {{ architectures | join(' ') }}
+Components: {{ components | join(' ') }}
+Description: APT repository for {{ name }}
+{%- if gpg_keypair_id != 'none' %}
+SignWith: {{ gpg_keypair_id }}
+{%- endif %}
+{% endfor %}
